@@ -43,6 +43,7 @@ export async function listResources(): Promise<Resource[]> {
 }
 
 export async function deleteResource(title: string) {
+  await db.delete(["resources"]);
   return await db.delete(["resources", title]);
 }
 

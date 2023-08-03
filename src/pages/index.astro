@@ -1,4 +1,5 @@
 ---
+import { WrappedForm } from "../components/example.jsx";
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 // To use Deno KV, swiitch this import to "resources_kv" in the same directory
@@ -9,9 +10,9 @@ if (Astro.request.method === "POST") {
   try {
     const data = await Astro.request.formData();
     const resource: Resource = {
-      url: data.get("url")?.toString() || "",
-      title: data.get("title")?.toString() || "",
-      summary: data.get("summary")?.toString() || "",
+      url: data.get("root_url")?.toString() || "",
+      title: data.get("root_title")?.toString() || "",
+      summary: data.get("root_summary")?.toString() || "",
     };
     await addResource(resource);
   } catch (error) {
@@ -24,6 +25,7 @@ if (Astro.request.method === "POST") {
 
 // Get a list of resources
 const resources: Resource[] = await listResources();
+
 ---
 
 <Layout title="Welcome to Deno 🦕">
@@ -34,7 +36,9 @@ const resources: Resource[] = await listResources();
       Welcome to Deno! Add your own links and resources using the form below.
       </p>
       <hr/>
-      <form method="POST">
+      ---
+      <WrappedForm/>
+      <!-- <form method="POST">
         <label for="url">URL</label>
         <input type="url" name="url" id="url" required/>
         <br/>
@@ -48,7 +52,8 @@ const resources: Resource[] = await listResources();
         <br/>
 
         <button type="submit">Submit</button>
-      </form>
+      </form> -->
+
     </div>
     <ul role="list" class="link-card-grid">
       {resources.map((resource) => (
